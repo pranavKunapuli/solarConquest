@@ -28,7 +28,7 @@ public class Field extends JPanel {
 	
 	public Field (JLabel status) {
 		// Loads the current level
-		//load(level);
+		load();
 		
 		// JComponent initialization
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -56,10 +56,13 @@ public class Field extends JPanel {
 		
 	}
 	
-	private void load(String level) {
+	private void load() {
 		BufferedReader r = null;
+		String level = "Level1.txt";
 		try {
 			r = new BufferedReader(new FileReader(level));
+			String title = r.readLine().trim();
+			status.setText(title);
 			while(r.ready()) {
 				String[] temp = r.readLine().split(",");
 				int size = Integer.parseInt(temp[0]);
@@ -93,7 +96,7 @@ public class Field extends JPanel {
 	@Override 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		
+		grid.draw(g);
 		for (int i = 0; i < planets.size(); i++) {
 			planets.get(i).draw(g);;
 		}

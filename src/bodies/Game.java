@@ -14,7 +14,7 @@ public class Game implements Runnable {
 		
 		final JPanel status_panel = new JPanel();
         frame.add(status_panel, BorderLayout.SOUTH);
-        final JLabel status = new JLabel("Running...");
+        final JLabel status = new JLabel("'Insert Mission Title Here'");
         status_panel.add(status);
         
         final Field field = new Field(status);
