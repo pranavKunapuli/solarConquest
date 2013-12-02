@@ -49,11 +49,14 @@ public class Field extends JPanel {
 		 * 2) Engage in battle over one timestep
 		 * 3) Regenerate forces on each planet
 		*/  
-		
+		for (int i = 0; i < ships.size(); i++) {
+			ships.get(i).move();
+		}
 	}
 	
 	public void reset() {
-		
+		load();
+		repaint();
 	}
 	
 	private void load() {

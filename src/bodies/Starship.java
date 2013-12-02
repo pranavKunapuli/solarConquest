@@ -13,4 +13,11 @@ public class Starship {
 		this.velY = velY;
 	}
 	
+	public void move() {
+		x += velX;
+		y += velY;
+	}
+	
+	public int getX() { return this.x; }
+	public int getY() { return this.y; }
 }
