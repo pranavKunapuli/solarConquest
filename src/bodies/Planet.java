@@ -36,10 +36,10 @@ public class Planet {
 	}
 	
 	public int getHealth() { return this.health; }
-	
+	public int getX() { return this.x; }
 	public int getForces() { return this.forces; }
-	
-	public int getEnemy() { return this.enemy; }
+	public int getY() { return this.y; }
+	public int getSize() { return this.size	; }
 	
 	public void draw (Graphics g) {
 		g.setColor(planetColor);

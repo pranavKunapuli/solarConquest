@@ -24,7 +24,7 @@ public class Field extends JPanel {
 	public static final int FIELD_HEIGHT = 500;
 	public static final int FIELD_WIDTH = 800;
 	// Time interval for planet battles
-	public static final int INTERVAL = 200;
+	public static final int INTERVAL = 35;
 	
 	public Field (JLabel status) {
 		// Loads the current level
@@ -49,6 +49,15 @@ public class Field extends JPanel {
 		 * 2) Engage in battle over one timestep
 		 * 3) Regenerate forces on each planet
 		*/  
+		
+		// Checks to see if ship will collide, and removes the ship from the
+		// ArrayList if it will collide with the next timestep
+		for (int i = 0; i < ships.size(); i++) {
+			Starship ship = ships.get(i);
+			if (ship.willIntersect()) { ships.remove(i); }
+		}
+		
+		// Moves the existing ships 
 		for (int i = 0; i < ships.size(); i++) {
 			ships.get(i).move();
 		}
@@ -61,7 +70,8 @@ public class Field extends JPanel {
 	
 	private void load() {
 		BufferedReader r = null;
-		String level = "Level1.txt";
+		String level = "Level1.txt"; 
+		//TODO Make it so that multiple levels can be read
 		try {
 			r = new BufferedReader(new FileReader(level));
 			String title = r.readLine().trim();
@@ -90,7 +100,6 @@ public class Field extends JPanel {
 			try {
 				r.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
