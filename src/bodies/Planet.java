@@ -4,6 +4,7 @@ import java.awt.*;
 
 
 public class Planet {
+	private int size; // Planet's radius
 	private int health; // Planet's health
 	private int original; // Planet's original health (for resetting)
 	private int x; // X coordinate
@@ -13,14 +14,15 @@ public class Planet {
 	private Territory t; // Whether user has conquered the planet or not
 	private java.awt.Color planetColor; // Planet display color
 	
-	public Planet(int health, int x, int y, int forces, int enemy, 
+	public Planet(int size, int x, int y, int forces, int enemy, int health,
 			Territory t) {
-		this.health = health;
-		this.original = health;
+		this.size = size;
+		this.original = size;
 		this.x = x;
 		this.y = y;
 		this.forces = forces;
 		this.enemy = enemy;
+		this.health = health;
 		this.t = t;
 		setColor();
 	}
@@ -92,6 +94,6 @@ public class Planet {
 	
 	public void draw (Graphics g) {
 		g.setColor(planetColor);
-		g.fillOval(this.x, this.y, health, health);
+		g.fillOval(this.x, this.y, size, size);
 	}
 }
