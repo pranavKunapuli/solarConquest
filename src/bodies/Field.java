@@ -27,6 +27,7 @@ public class Field extends JPanel {
 	public static final int INTERVAL = 35;
 	
 	public Field (JLabel status) {
+		this.status = status;
 		// Loads the current level
 		load();
 		
@@ -39,7 +40,6 @@ public class Field extends JPanel {
 		});
 		timer.start();
 		setFocusable(true);
-		this.status = status;
 	}
 	
 
@@ -82,7 +82,7 @@ public class Field extends JPanel {
 		try {
 			r = new BufferedReader(new FileReader(level));
 			String title = r.readLine().trim();
-			status.setText(title);
+			status.setText("Mission 1: The Beginning");
 			while(r.ready()) {
 				String[] temp = r.readLine().split(",");
 				int size = Integer.parseInt(temp[0]);

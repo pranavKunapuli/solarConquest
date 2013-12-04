@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.ImageObserver;
 import java.net.URL;
-
 import javax.imageio.ImageIO;
 
 public class Starship {
@@ -16,6 +15,8 @@ public class Starship {
 	private Planet end;
 	private Vector dir;
 	private Image img;
+	
+	private enum Vector { UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT; }
 	
 	public Starship(Planet start, Planet end) {
 		this.start = start;
@@ -33,28 +34,22 @@ public class Starship {
 	private void setStartPoint() {
 		if (dir == Vector.UP_RIGHT) {
 			this.x = start.getX() + start.getSize();
-			this.y = start.getY() + start.getSize();
-			this.velX = 20;
-			this.velY = 20;
+			this.y = start.getY() + start.getSize() + 40;
 		}
 		else if (dir == Vector.UP_LEFT) {
-			this.x = start.getX() - start.getSize();
-			this.y = start.getY() + start.getSize();
-			this.velX = -20;
-			this.velY = 20;
+			this.x = start.getX() - start.getSize() - 40;
+			this.y = start.getY() + start.getSize() + 40;
 		}
 		else if (dir == Vector.DOWN_RIGHT) {
 			this.x = start.getX() + start.getSize();
 			this.y = start.getY() - start.getSize();
-			this.velX = 20;
-			this.velY = -20;
 		}
 		else {
-			this.x = start.getX() - start.getSize();
+			this.x = start.getX() - start.getSize() - 40;
 			this.y = start.getY() - start.getSize();
-			this.velX = -20;
-			this.velY = -20;
 		}
+		this.velX = (end.getX() - start.getX()) / 10;
+		this.velY = (end.getY() - start.getX()) / 10;
 	}
 
 	private Vector setVector() {
@@ -67,8 +62,6 @@ public class Starship {
 			else { return Vector.UP_LEFT; }
 		}
 	}
-	
-	private enum Vector { UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT; }
 	
 	public void move() {
 		x += velX;
