@@ -1,6 +1,11 @@
 package bodies;
 
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.ImageObserver;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
 
 public class Starship {
 	private int x; // X-Coordinate of the starship
@@ -10,38 +15,45 @@ public class Starship {
 	private Planet start;
 	private Planet end;
 	private Vector dir;
+	private Image img;
 	
 	public Starship(Planet start, Planet end) {
 		this.start = start;
 		this.end = end;
 		dir = setVector();
 		setStartPoint();
+		try {
+			this.img = ImageIO.read(new URL("http://johneaves.files.wordpress.com/2009/03/starship-b.jpg"));
+			img.getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void setStartPoint() {
 		if (dir == Vector.UP_RIGHT) {
 			this.x = start.getX() + start.getSize();
 			this.y = start.getY() + start.getSize();
-			this.velX = 50;
-			this.velY = 50;
+			this.velX = 20;
+			this.velY = 20;
 		}
 		else if (dir == Vector.UP_LEFT) {
 			this.x = start.getX() - start.getSize();
 			this.y = start.getY() + start.getSize();
-			this.velX = -50;
-			this.velY = 50;
+			this.velX = -20;
+			this.velY = 20;
 		}
 		else if (dir == Vector.DOWN_RIGHT) {
 			this.x = start.getX() + start.getSize();
 			this.y = start.getY() - start.getSize();
-			this.velX = 50;
-			this.velY = -50;
+			this.velX = 20;
+			this.velY = -20;
 		}
 		else {
 			this.x = start.getX() - start.getSize();
 			this.y = start.getY() - start.getSize();
-			this.velX = -50;
-			this.velY = -50;
+			this.velX = -20;
+			this.velY = -20;
 		}
 	}
 
@@ -74,11 +86,12 @@ public class Starship {
 		int p_size = end.getSize();
 		return (next_x >= (p_x - p_size) 
 				&& next_x <= (p_x + p_size)
-				&& next_y >= (p_x - p_size)
-				&& next_y <= (p_x + p_size));
+				&& next_y >= (p_y - p_size)
+				&& next_y <= (p_y + p_size));
 	}
 
 	public void draw(Graphics g) {
-		
+		ImageObserver observer = null;
+		g.drawImage(img, x, y, observer);
 	}
 }

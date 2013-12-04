@@ -61,6 +61,13 @@ public class Field extends JPanel {
 		for (int i = 0; i < ships.size(); i++) {
 			ships.get(i).move();
 		}
+		
+		for (int i = 1; i < planets.size(); i++) {
+			Planet p = planets.get(i);
+			if (p.getForces() != 0) {
+				p.destroyShips();
+			}
+		}
 	}
 	
 	public void reset() {

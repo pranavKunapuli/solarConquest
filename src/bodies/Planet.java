@@ -17,12 +17,12 @@ public class Planet {
 	public Planet(int size, int x, int y, int forces, int enemy, int health,
 			Territory t) {
 		this.size = size;
-		this.original = size;
 		this.x = x;
 		this.y = y;
 		this.forces = forces;
 		this.enemy = enemy;
 		this.health = health;
+		this.original = health;
 		this.t = t;
 		setColor();
 	}
@@ -40,6 +40,29 @@ public class Planet {
 	public int getForces() { return this.forces; }
 	public int getY() { return this.y; }
 	public int getSize() { return this.size	; }
+	
+	public void destroyShips() {
+		if (forces != 0) { 
+			forces = forces - enemy; 
+			if (forces <= 0) {
+				forces = 0;
+				health = original;
+				t = Territory.ENEMY;
+				setColor();
+			}
+			else {
+				health = health - (enemy/2);
+				if (health <= 0) {
+					health = 0; 
+					t = Territory.USER;
+					setColor();
+				}
+			}
+		}
+		else {
+			health = original;
+		}
+	}
 	
 	public void draw (Graphics g) {
 		g.setColor(planetColor);
