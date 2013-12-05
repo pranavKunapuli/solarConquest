@@ -10,7 +10,7 @@ public class Game implements Runnable {
 	@Override
 	public void run() {
 		JFrame frame = new JFrame("Solar Conquest");
-		frame.setLocation(450,200);
+		frame.setLocation(200,200);
 		
 		final JPanel status_panel = new JPanel();
         frame.add(status_panel, BorderLayout.SOUTH);

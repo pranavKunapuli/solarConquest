@@ -21,8 +21,8 @@ public class Field extends JPanel {
 	private JLabel status; // Current status text
 	
 	// Game constants
-	public static final int FIELD_HEIGHT = 500;
-	public static final int FIELD_WIDTH = 800;
+	public static final int FIELD_HEIGHT = 800;
+	public static final int FIELD_WIDTH = 1500;
 	// Time interval for planet battles
 	public static final int INTERVAL = 35;
 	
@@ -128,8 +128,8 @@ public class Field extends JPanel {
 				int health = Integer.parseInt(temp[5]);
 				String t_hold = temp[6].toUpperCase();
 				Territory t;
-				if (t_hold == "USER") { t = Territory.USER; }
-				else if (t_hold == "ENEMY") { t = Territory.ENEMY; }
+				if (t_hold.equals("USER")) { t = Territory.USER; }
+				else if (t_hold.equals("ENEMY")) { t = Territory.ENEMY; }
 				else { t = Territory.NEUTRAL; }
 				planets.add(new Planet(size, x, y, forces, enemy, health, t));
 			}
