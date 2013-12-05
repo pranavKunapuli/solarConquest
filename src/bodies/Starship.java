@@ -2,8 +2,10 @@ package bodies;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.ImageObserver;
-import java.net.URL;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 public class Starship {
@@ -23,12 +25,20 @@ public class Starship {
 		this.end = end;
 		dir = setVector();
 		setStartPoint();
+		getImage();
+	}
+
+	private void getImage() {
+		BufferedImage buff = null;
 		try {
-			this.img = ImageIO.read(new URL("http://johneaves.files.wordpress.com/2009/03/starship-b.jpg"));
-			img.getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		} catch (Exception e) {
+			buff = ImageIO.read(new File("starship.jpg"));
+		} catch (NullPointerException n) {
+			n.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("File not found");
 			e.printStackTrace();
 		}
+		img = buff;
 	}
 
 	private void setStartPoint() {
@@ -84,7 +94,7 @@ public class Starship {
 	}
 
 	public void draw(Graphics g) {
-		ImageObserver observer = null;
-		g.drawImage(img, x, y, observer);
+		img.getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+		g.drawImage(img, x, y, null);
 	}
 }

@@ -1,6 +1,11 @@
 package bodies;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 
 public class Planet {
@@ -12,7 +17,7 @@ public class Planet {
 	private int forces; // Amount of ships around planet
 	private int enemy; // Rate of deterioration of user's ships
 	private Territory t; // Whether user has conquered the planet or not
-	private java.awt.Color planetColor; // Planet display color
+	private String src; // Planet image source
 	
 	public Planet(int size, int x, int y, int forces, int enemy, int health,
 			Territory t) {
@@ -29,9 +34,15 @@ public class Planet {
 	
 	private void setColor() {
 		switch (t) {
-		case USER: planetColor = Color.GREEN; break;
-		case ENEMY: planetColor = Color.RED; break;
-		case NEUTRAL: planetColor = Color.GRAY; break;
+		case USER: 
+			src = "green_planet.jpg"; 
+			break;
+		case ENEMY: 
+			src = "red_planet.jpg"; 
+			break;
+		case NEUTRAL: 
+			src = "gray_planet.jpg"; 
+			break;
 		}
 	}
 	
@@ -65,7 +76,26 @@ public class Planet {
 	}
 	
 	public void draw (Graphics g) {
-		g.setColor(planetColor);
-		g.fillOval(this.x, this.y, size, size);
+		Image img = getImage();
+		img.getScaledInstance(size, size, Image.SCALE_DEFAULT);
+		g.drawImage(img, x, y, null);
+		String display = forces + " : " + health;
+		System.out.println(display);
+		g.setColor(new Color(255,255,255));
+		g.drawString(display, x - (size / 4), y);
+	}
+	
+	private Image getImage() {
+		BufferedImage buff = null;
+		try {
+			buff = ImageIO.read(new File(src));
+		} catch (NullPointerException n) {
+			n.printStackTrace();
+			System.out.println("Source file invalid");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("File could not be read");
+		}
+		return buff;
 	}
 }

@@ -30,6 +30,7 @@ public class Field extends JPanel {
 		this.status = status;
 		// Loads the current level
 		load();
+		System.out.println(planets.size());
 		
 		// JComponent initialization
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -38,6 +39,40 @@ public class Field extends JPanel {
 				ellapse();
 			}
 		});
+		
+		addMouseListener (new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		timer.start();
 		setFocusable(true);
 	}
@@ -82,7 +117,7 @@ public class Field extends JPanel {
 		try {
 			r = new BufferedReader(new FileReader(level));
 			String title = r.readLine().trim();
-			status.setText("Mission 1: The Beginning");
+			status.setText(title);
 			while(r.ready()) {
 				String[] temp = r.readLine().split(",");
 				int size = Integer.parseInt(temp[0]);
@@ -117,7 +152,9 @@ public class Field extends JPanel {
 		super.paintComponent(g);
 		grid.draw(g);
 		for (int i = 0; i < planets.size(); i++) {
-			planets.get(i).draw(g);;
+			Planet p = planets.get(i);
+			p.draw(g);
+			System.out.println("Here");
 		}
 	}
 
