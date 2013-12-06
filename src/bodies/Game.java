@@ -31,6 +31,14 @@ public class Game implements Runnable {
             });
         control_panel.add(reset);
         
+        final JButton quit = new JButton("Quit");
+        quit.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		System.exit(0);
+        	}
+        });
+        control_panel.add(quit);
+        
 		frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);

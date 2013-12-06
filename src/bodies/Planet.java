@@ -35,13 +35,13 @@ public class Planet {
 	private void setColor() {
 		switch (t) {
 		case USER: 
-			src = "green_planet.jpg"; 
+			src = "greenPlanet.gif"; 
 			break;
 		case ENEMY: 
-			src = "red_planet.jpg"; 
+			src = "redPlanet.gif"; 
 			break;
 		case NEUTRAL: 
-			src = "gray_planet.jpg"; 
+			src = "grayPlanet.gif"; 
 			break;
 		}
 	}
@@ -77,11 +77,13 @@ public class Planet {
 	
 	public void draw (Graphics g) {
 		Image img = getImage();
-		img.getScaledInstance(size, size, Image.SCALE_DEFAULT);
-		g.drawImage(img, x, y, null);
+		Image show = img.getScaledInstance(size, size, Image.SCALE_DEFAULT);
+		g.drawImage(show, x - (size/2), y - (size/2), null);
 		String display = forces + " : " + health;
 		System.out.println(display);
-		g.setColor(new Color(255,255,255));
+		if (t == Territory.USER) { g.setColor(new Color(0,0,0)); }
+		else { g.setColor(new Color(255,255,255)); }
+		g.setFont(new Font("default", Font.BOLD, 16));
 		g.drawString(display, x - (size / 4), y);
 	}
 	

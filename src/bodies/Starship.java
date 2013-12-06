@@ -38,7 +38,7 @@ public class Starship {
 			System.out.println("File not found");
 			e.printStackTrace();
 		}
-		img = buff;
+		img = buff.getScaledInstance(40, 40, Image.SCALE_DEFAULT);
 	}
 
 	private void setStartPoint() {
@@ -94,7 +94,6 @@ public class Starship {
 	}
 
 	public void draw(Graphics g) {
-		img.getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		g.drawImage(img, x, y, null);
+		g.drawImage(img, x - 20, y - 20, null);
 	}
 }

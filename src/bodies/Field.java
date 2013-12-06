@@ -2,11 +2,14 @@ package bodies;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ public class Field extends JPanel {
 	public static final int FIELD_WIDTH = 1500;
 	// Time interval for planet battles
 	public static final int INTERVAL = 35;
+	public static final int TIME_LIMIT = 1200000;
 	
 	public Field (JLabel status) {
 		this.status = status;
@@ -37,6 +41,12 @@ public class Field extends JPanel {
 		Timer timer = new Timer(INTERVAL, new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				ellapse();
+			}
+		});
+		
+		Timer end = new Timer(TIME_LIMIT, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				endGame();
 			}
 		});
 		
@@ -76,8 +86,12 @@ public class Field extends JPanel {
 		timer.start();
 		setFocusable(true);
 	}
-	
 
+	private void endGame() {
+		status.setText("Time's up! Your armada has been destroyed!");
+		playing = false;
+	}
+	
 	private void ellapse() {
 		/* TODO 
 		 * 1) Move ships that have been created (i.e. new attack requested)
@@ -150,6 +164,10 @@ public class Field extends JPanel {
 	@Override 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
+		Image img = getSpace();
+		Image background = img.getScaledInstance(FIELD_WIDTH, FIELD_HEIGHT, 
+														Image.SCALE_DEFAULT);
+		g.drawImage(background, 0, 0, null);
 		grid.draw(g);
 		for (int i = 0; i < planets.size(); i++) {
 			Planet p = planets.get(i);
@@ -157,6 +175,21 @@ public class Field extends JPanel {
 			System.out.println("Here");
 		}
 	}
+
+	private Image getSpace() {
+		BufferedImage buff = null;
+		try {
+			buff = ImageIO.read(new File("space.jpg"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("File Not Found");
+		} catch (NullPointerException n) {
+			System.out.println("Path argument is null");
+			n.printStackTrace();
+		}
+		return buff;
+	}
+
 
 	@Override
 	public Dimension getPreferredSize(){
