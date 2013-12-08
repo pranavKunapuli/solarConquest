@@ -100,4 +100,13 @@ public class Planet {
 		}
 		return buff;
 	}
+
+	public boolean isWithin(Point location) {
+		if ((location.x >= x - size) && (location.x <= x + size)) {
+			if ((location.y >= y - size) && (location.y <= y + size)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

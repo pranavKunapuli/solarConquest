@@ -19,6 +19,8 @@ public class Field extends JPanel {
 	private Grid grid = new Grid(FIELD_WIDTH,FIELD_HEIGHT); // A grid for frame of reference
 	ArrayList<Planet> planets = new ArrayList<Planet>();
 	ArrayList<Starship> ships = new ArrayList<Starship>();
+	Planet start = null;
+	Planet finish = null;
 	
 	public boolean playing = false; // Whether the game is playing or not
 	private JLabel status; // Current status text
@@ -51,36 +53,48 @@ public class Field extends JPanel {
 		});
 		
 		addMouseListener (new MouseListener() {
-
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
+			public void mouseClicked(MouseEvent e) {
+				for (int i = 0; i < planets.size(); i++) {
+					Planet p = planets.get(i);
+					if (p.isWithin(e.getLocationOnScreen())) {
+						// Tests to see if start has been set or not
+						if (start == null) {
+							start = p; // Sets the starting planet to the current planet in the ArrayList
+						}
+						else { 
+							finish = p; // Sets the finishing planet to the current planet in the ArrayList
+							ships.add(new Starship(start, finish)); // Adds new ship to be drawn
+							start = null; // Reset the starting planet after ship is created
+							finish = null; // Reset the ending planet after ship is created
+						}
+					}
+				}
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent arg0) {
+			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
-			public void mouseExited(MouseEvent arg0) {
+			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
-			public void mousePressed(MouseEvent arg0) {
+			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
+			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
-			
 		});
 		
 		timer.start();
