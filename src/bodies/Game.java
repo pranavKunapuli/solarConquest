@@ -49,7 +49,6 @@ public class Game implements Runnable {
         		instructions.add(instr, BorderLayout.CENTER);
         		
         		instructions.pack();
-        		instructions.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         		instructions.setVisible(true);
         	}
         });

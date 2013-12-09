@@ -18,6 +18,8 @@ public class Planet {
 	private int enemy; // Rate of deterioration of user's ships
 	private Territory t; // Whether user has conquered the planet or not
 	private String src; // Planet image source
+	private boolean selected; // Whether planet has been clicked or not
+	public boolean control; // Whether user has control of the planet
 	
 	public Planet(int size, int x, int y, int forces, int enemy, int health,
 			Territory t) {
@@ -29,6 +31,7 @@ public class Planet {
 		this.health = health;
 		this.original = health;
 		this.t = t;
+		selected = false;
 		setColor();
 	}
 	
@@ -36,12 +39,15 @@ public class Planet {
 		switch (t) {
 		case USER: 
 			src = "greenPlanet.gif"; 
+			control = false;
 			break;
 		case ENEMY: 
 			src = "redPlanet.gif"; 
+			control = true;
 			break;
 		case NEUTRAL: 
 			src = "grayPlanet.gif"; 
+			control = true;
 			break;
 		}
 	}
@@ -51,36 +57,46 @@ public class Planet {
 	public int getForces() { return this.forces; }
 	public int getY() { return this.y; }
 	public int getSize() { return this.size	; }
+	public boolean isSelected() { return selected; }
+	public void select() { selected = true; }
+	public void deselect() { selected = false; }
 	
 	public void destroyShips() {
-		if (forces != 0) { 
-			forces = forces - enemy; 
-			if (forces <= 0) {
-				forces = 0;
-				health = original;
-				t = Territory.ENEMY;
-				setColor();
-			}
-			else {
-				health = health - (enemy/2);
+		switch(t) {
+		case USER:
+			forces += enemy; // Regenerates forces
+			break;
+		case NEUTRAL:
+			if (forces != 0) {
+				forces -= enemy; // Reduces forces;
+				health -= enemy; // Reduces health;
 				if (health <= 0) {
-					health = 0; 
 					t = Territory.USER;
+					setColor();
+					health = original;
+				}
+				else if (forces <= 0) { 
+					health = original;
+					t = Territory.NEUTRAL;
 					setColor();
 				}
 			}
-		}
-		else {
-			health = original;
+		case ENEMY:
+			if (forces != 0) {
+				forces -= enemy; // Reduces forces
+				health -= enemy; // Reduces health
+				if (health <= 0) {
+					control = true;
+				}
+			}
 		}
 	}
-	
+
 	public void draw (Graphics g) {
 		Image img = getImage();
 		Image show = img.getScaledInstance(size, size, Image.SCALE_DEFAULT);
 		g.drawImage(show, x - (size/2), y - (size/2), null);
 		String display = forces + " : " + health;
-		System.out.println(display);
 		if (t == Territory.USER) { g.setColor(new Color(0,0,0)); }
 		else { g.setColor(new Color(255,255,255)); }
 		g.setFont(new Font("default", Font.BOLD, 16));
@@ -102,11 +118,9 @@ public class Planet {
 	}
 
 	public boolean isWithin(Point location) {
-		if ((location.x >= x - size) && (location.x <= x + size)) {
-			if ((location.y >= y - size) && (location.y <= y + size)) {
-				return true;
-			}
-		}
-		return false;
+		return (location.x >= x - size
+				&& location.x <= x + size
+				&& location.y >= y - size
+				&& location.y <= y + size);
 	}
 }

@@ -17,10 +17,11 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class Field extends JPanel {
 	private Grid grid = new Grid(FIELD_WIDTH,FIELD_HEIGHT); // A grid for frame of reference
-	ArrayList<Planet> planets = new ArrayList<Planet>();
-	ArrayList<Starship> ships = new ArrayList<Starship>();
-	Planet start = null;
-	Planet finish = null;
+	private ArrayList<Planet> planets = new ArrayList<Planet>();
+	private ArrayList<Starship> ships = new ArrayList<Starship>();
+	private Planet start = null;
+	private Integer time_counter = 0;
+	private boolean win = false;
 	
 	public boolean playing = false; // Whether the game is playing or not
 	private JLabel status; // Current status text
@@ -30,13 +31,12 @@ public class Field extends JPanel {
 	public static final int FIELD_WIDTH = 1500;
 	// Time interval for planet battles
 	public static final int INTERVAL = 35;
-	public static final int TIME_LIMIT = 1200000;
+	public static final int TIME_LIMIT = 1000;
 	
 	public Field (JLabel status) {
 		this.status = status;
 		// Loads the current level
 		load();
-		System.out.println(planets.size());
 		
 		// JComponent initialization
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -52,58 +52,50 @@ public class Field extends JPanel {
 			}
 		});
 		
-		addMouseListener (new MouseListener() {
+		addMouseListener (new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				System.out.println("Mouse clicked");
 				for (int i = 0; i < planets.size(); i++) {
 					Planet p = planets.get(i);
 					if (p.isWithin(e.getLocationOnScreen())) {
+						System.out.println("Mouse detected");
 						// Tests to see if start has been set or not
 						if (start == null) {
 							start = p; // Sets the starting planet to the current planet in the ArrayList
+							start.select();
+							System.out.println("Start set");
+							repaint();
 						}
 						else { 
-							finish = p; // Sets the finishing planet to the current planet in the ArrayList
-							ships.add(new Starship(start, finish)); // Adds new ship to be drawn
+							ships.add(new Starship(start, p)); // Adds new ship to be drawn
+							start.deselect(); // Deselects the initially chosen planet
 							start = null; // Reset the starting planet after ship is created
-							finish = null; // Reset the ending planet after ship is created
+							System.out.println("End set");
+							repaint();
 						}
+					}
+					else {
+						System.out.println("nowhere");
 					}
 				}
 			}
 
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
 		});
 		
 		timer.start();
+		end.start();
 		setFocusable(true);
 	}
 
 	private void endGame() {
-		status.setText("Time's up! Your armada has been destroyed!");
-		playing = false;
+		time_counter++;
+		if(time_counter >= 10) {	
+			status.setText("Time's up! Your armada has been destroyed!");
+			playing = false;
+			System.exit(0);
+		}
+		repaint();
 	}
 	
 	private void ellapse() {
@@ -130,6 +122,19 @@ public class Field extends JPanel {
 			if (p.getForces() != 0) {
 				p.destroyShips();
 			}
+		}
+		
+		// Tests for victory
+		win = true;
+		for (int i = 0; i < planets.size(); i++) {
+			Planet p = planets.get(i);
+			if (!p.control) {
+				win = false;
+				break;
+			}
+		}
+		if(win) {
+			playing = false;
 		}
 	}
 	
@@ -183,10 +188,20 @@ public class Field extends JPanel {
 														Image.SCALE_DEFAULT);
 		g.drawImage(background, 0, 0, null);
 		grid.draw(g);
+		g.setFont(new Font("default", Font.BOLD, 16));
+		g.setColor(new Color(255,255,255));
+		g.drawString("Time: " + time_counter.toString(), 1400, 50);
 		for (int i = 0; i < planets.size(); i++) {
 			Planet p = planets.get(i);
+			if (p.isSelected()) {
+				System.out.println("Draw: selected");
+				int x = p.getX();
+				int y = p.getY();
+				int size = p.getSize();
+				g.setColor(new Color (255,255,0));
+				g.fillOval(x - (size/2), y - (size/2), size + 20, size + 20);
+			}
 			p.draw(g);
-			System.out.println("Here");
 		}
 	}
 
