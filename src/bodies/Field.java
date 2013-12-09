@@ -58,9 +58,10 @@ public class Field extends JPanel {
 				System.out.println("Mouse clicked");
 				for (int i = 0; i < planets.size(); i++) {
 					Planet p = planets.get(i);
-					System.out.println(e.getLocationOnScreen().x);
-					System.out.println(e.getLocationOnScreen().y);
-					if (p.isWithin(e.getLocationOnScreen())) {
+					Point mouse = MouseInfo.getPointerInfo().getLocation();
+					System.out.println(mouse.x);
+					System.out.println(mouse.y);
+					if (p.isWithin(mouse)) {
 						System.out.println("Mouse detected");
 						// Tests to see if start has been set or not
 						if (start == null) {
@@ -92,7 +93,7 @@ public class Field extends JPanel {
 
 	private void endGame() {
 		time_counter++;
-		if(time_counter >= 30) {	
+		if(time_counter >= 60) {	
 			status.setText("Time's up! Your armada has been destroyed!");
 			playing = false;
 			System.exit(0);

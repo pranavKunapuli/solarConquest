@@ -117,7 +117,8 @@ public class Planet {
 		return buff;
 	}
 
-	public boolean isWithin(Point location) {
+	public boolean isWithin(Point init) {
+		Point location = new Point (init.x - 200, init.y - 200);
 		return (location.x >= x - size
 				&& location.x <= x + size
 				&& location.y >= y - size
