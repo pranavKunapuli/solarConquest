@@ -39,17 +39,19 @@ public class Game implements Runnable {
         });
         control_panel.add(quit);
         
+        final JFrame instructions = new JFrame("Instructions");
+		instructions.setLocation(500,500);
+		
+		final Instructions instr = new Instructions();
+		instructions.add(instr, BorderLayout.CENTER);
+		
+		instructions.pack();
+        
         final JButton rules = new JButton("Instructions");
         rules.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		JFrame instructions = new JFrame("Instructions");
-        		rules.setLocation(500,500);
-        		
-        		final Instructions instr = new Instructions();
-        		instructions.add(instr, BorderLayout.CENTER);
-        		
-        		instructions.pack();
         		instructions.setVisible(true);
+        		instructions.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         	}
         });
         control_panel.add(rules);
