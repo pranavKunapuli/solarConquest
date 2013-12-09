@@ -2,6 +2,7 @@ package bodies;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class Starship {
 			System.out.println("File not found");
 			e.printStackTrace();
 		}
-		img = buff.getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+		img = buff.getScaledInstance(80, 80, Image.SCALE_DEFAULT);
 	}
 
 	private void setStartPoint() {
@@ -58,8 +59,8 @@ public class Starship {
 			this.x = start.getX() - start.getSize() - 40;
 			this.y = start.getY() - start.getSize();
 		}
-		this.velX = (end.getX() - start.getX()) / 10;
-		this.velY = (end.getY() - start.getX()) / 10;
+		this.velX = (end.getX() - start.getX()) / 25;
+		this.velY = (end.getY() - start.getX()) / 25;
 	}
 
 	private Vector setVector() {
@@ -80,17 +81,15 @@ public class Starship {
 	
 	public int getX() { return this.x; }
 	public int getY() { return this.y; }
+	public int getNextX() { return x + velX; }
+	public int getNextY() { return y + velY; }
+	public Planet getEnd() { return end; }
 	
-	public boolean willIntersect () {
-		int next_x = x + velX;
-		int next_y = y + velY;
-		int p_x = end.getX();
-		int p_y = end.getY();
-		int p_size = end.getSize();
-		return (next_x >= (p_x - p_size) 
-				&& next_x <= (p_x + p_size)
-				&& next_y >= (p_y - p_size)
-				&& next_y <= (p_y + p_size));
+	public boolean willIntersect() {
+		int next_x = x + velX + 200;
+		int next_y = y + velY + 200;
+		Point next = new Point(next_x, next_y);
+		return end.isWithin(next);
 	}
 
 	public void draw(Graphics g) {

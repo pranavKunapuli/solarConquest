@@ -20,8 +20,10 @@ public class Field extends JPanel {
 	private ArrayList<Planet> planets = new ArrayList<Planet>();
 	private ArrayList<Starship> ships = new ArrayList<Starship>();
 	private Planet start = null;
+	private Planet finish = null;
 	private Integer time_counter = 0;
-	private boolean win = false;
+	private int level_count = 1;
+	private String level = "Level" + level_count + ".txt";
 	
 	public boolean playing = false; // Whether the game is playing or not
 	private JLabel status; // Current status text
@@ -30,8 +32,8 @@ public class Field extends JPanel {
 	public static final int FIELD_HEIGHT = 800;
 	public static final int FIELD_WIDTH = 1500;
 	// Time interval for planet battles
-	public static final int INTERVAL = 35;
-	public static final int TIME_LIMIT = 1000;
+	public static final int INTERVAL = 5;
+	public static final int TIME_LIMIT = 500;
 	
 	public Field (JLabel status) {
 		this.status = status;
@@ -58,7 +60,7 @@ public class Field extends JPanel {
 				System.out.println("Mouse clicked");
 				for (int i = 0; i < planets.size(); i++) {
 					Planet p = planets.get(i);
-					Point mouse = MouseInfo.getPointerInfo().getLocation();
+					Point mouse = e.getPoint();
 					System.out.println(mouse.x);
 					System.out.println(mouse.y);
 					if (p.isWithin(mouse)) {
@@ -69,13 +71,14 @@ public class Field extends JPanel {
 							start.select();
 							System.out.println("Start set");
 							repaint();
+							break;
 						}
 						else { 
-							ships.add(new Starship(start, p)); // Adds new ship to be drawn
-							start.deselect(); // Deselects the initially chosen planet
-							start = null; // Reset the starting planet after ship is created
+							finish = p;
+							start.attack(finish);
 							System.out.println("End set");
 							repaint();
+							break;
 						}
 					}
 					else {
@@ -92,13 +95,22 @@ public class Field extends JPanel {
 	}
 
 	private void endGame() {
-		time_counter++;
-		if(time_counter >= 60) {	
-			status.setText("Time's up! Your armada has been destroyed!");
-			playing = false;
-			System.exit(0);
+		if(playing) {
+			time_counter++;
+			if(time_counter >= 120) {	
+				status.setText("Time's up! Your armada has been destroyed!");
+				playing = false;
+				System.out.println("Time up");
+			}
+			
+			for (int i = 0; i < planets.size(); i++) {
+				Planet p = planets.get(i);
+				if (p.getForces() != 0) {
+					p.destroyShips();
+				}
+			}
+			repaint();
 		}
-		repaint();
 	}
 	
 	private void ellapse() {
@@ -108,52 +120,39 @@ public class Field extends JPanel {
 		 * 3) Regenerate forces on each planet
 		*/  
 		
-		// Checks to see if ship will collide, and removes the ship from the
-		// ArrayList if it will collide with the next timestep
-		for (int i = 0; i < ships.size(); i++) {
-			Starship ship = ships.get(i);
-			if (ship.willIntersect()) { ships.remove(i); }
-		}
-		
-		// Moves the existing ships 
-		for (int i = 0; i < ships.size(); i++) {
-			ships.get(i).move();
-		}
-		
-		for (int i = 1; i < planets.size(); i++) {
-			Planet p = planets.get(i);
-			if (p.getForces() != 0) {
-				p.destroyShips();
-			}
-		}
-		
 		// Tests for victory
-		win = true;
-		for (int i = 0; i < planets.size(); i++) {
-			Planet p = planets.get(i);
-			if (!p.control) {
-				win = false;
-				break;
+		if(playing) {
+			int win_count = 0;
+			for (int i = 0; i < planets.size(); i++) {
+				Planet p = planets.get(i);
+				if (p.control) {
+					win_count++;
+				}
 			}
-		}
-		if(win) {
-			playing = false;
+			
+			if(win_count == planets.size()) {
+				status.setText("You have conquered the planet field!");
+				//level_count++;
+				//load();
+				repaint();
+				playing = false;
+			}
+			repaint();
 		}
 	}
 	
 	public void reset() {
 		planets.clear();
-		ships.clear();
+		playing = true;
 		start = null;
+		finish = null;
 		time_counter = 0;
-		win = false;
 		load();
 		repaint();
 	}
 	
 	private void load() {
 		BufferedReader r = null;
-		String level = "Level1.txt"; 
 		//TODO Make it so that multiple levels can be read
 		try {
 			r = new BufferedReader(new FileReader(level));
@@ -195,10 +194,12 @@ public class Field extends JPanel {
 		Image background = img.getScaledInstance(FIELD_WIDTH, FIELD_HEIGHT, 
 														Image.SCALE_DEFAULT);
 		g.drawImage(background, 0, 0, null);
-		grid.draw(g);
-		g.setFont(new Font("default", Font.BOLD, 16));
-		g.setColor(new Color(255,255,255));
-		g.drawString("Time: " + time_counter.toString(), 1400, 50);
+		grid.draw(g); // Draws a white grid for effect
+		g.setFont(new Font("default", Font.BOLD, 16)); // Boldens the font
+		g.setColor(new Color(255,255,255)); // Makes text white
+		Integer display_time = time_counter/2;
+		g.drawString("Time: " + display_time.toString(), 1400, 50); // Shows time
+		// Draws planets, including selected planets
 		for (int i = 0; i < planets.size(); i++) {
 			Planet p = planets.get(i);
 			if (p.isSelected()) {
@@ -207,8 +208,20 @@ public class Field extends JPanel {
 				int size = p.getSize();
 				g.setColor(new Color (255,255,0));
 				g.fillOval(x - (size/2) - 10, y - (size/2) - 10, size + 20, size + 20);
+				if(finish != null) {
+					g.drawLine(start.getX(), start.getY(), finish.getX(), finish.getY());
+					start.deselect();
+					start = null;
+					finish = null;
+				}
 			}
 			p.draw(g);
+		}
+		
+		// Draws any ships for the field
+		for (int j = 0; j < ships.size(); j++) {
+			Starship ship = ships.get(j);
+			ship.draw(g);
 		}
 	}
 

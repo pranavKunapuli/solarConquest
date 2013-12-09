@@ -39,15 +39,15 @@ public class Planet {
 		switch (t) {
 		case USER: 
 			src = "greenPlanet.gif"; 
-			control = false;
+			control = true;
 			break;
 		case ENEMY: 
 			src = "redPlanet.gif"; 
-			control = true;
+			control = false;
 			break;
 		case NEUTRAL: 
 			src = "grayPlanet.gif"; 
-			control = true;
+			control = false;
 			break;
 		}
 	}
@@ -55,6 +55,7 @@ public class Planet {
 	public int getHealth() { return this.health; }
 	public int getX() { return this.x; }
 	public int getForces() { return this.forces; }
+	public void setForces(int f) { forces = f; }
 	public int getY() { return this.y; }
 	public int getSize() { return this.size	; }
 	public boolean isSelected() { return selected; }
@@ -65,6 +66,7 @@ public class Planet {
 		switch(t) {
 		case USER:
 			forces += enemy; // Regenerates forces
+			control = true;
 			break;
 		case NEUTRAL:
 			if (forces != 0) {
@@ -74,11 +76,13 @@ public class Planet {
 					t = Territory.USER;
 					setColor();
 					health = original;
+					control = true;
 				}
 				else if (forces <= 0) { 
 					health = original;
 					t = Territory.NEUTRAL;
 					setColor();
+					control = false;
 				}
 			}
 		case ENEMY:
@@ -86,7 +90,13 @@ public class Planet {
 				forces -= enemy; // Reduces forces
 				health -= enemy; // Reduces health
 				if (health <= 0) {
+					health = 0;
 					control = true;
+				}
+				if (forces <= 0) {
+					forces = 0;
+					control = false;
+					health = original;
 				}
 			}
 		}
@@ -117,11 +127,15 @@ public class Planet {
 		return buff;
 	}
 
-	public boolean isWithin(Point init) {
-		Point location = new Point (init.x - 200, init.y - 200);
+	public boolean isWithin(Point location) {
 		return (location.x >= x - size
 				&& location.x <= x + size
 				&& location.y >= y - size
 				&& location.y <= y + size);
+	}
+	
+	public void attack(Planet dest) {
+		dest.setForces(this.forces / 2);
+		forces /= 2;
 	}
 }
