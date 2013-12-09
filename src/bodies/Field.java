@@ -141,6 +141,11 @@ public class Field extends JPanel {
 	}
 	
 	public void reset() {
+		planets.clear();
+		ships.clear();
+		start = null;
+		time_counter = 0;
+		win = false;
 		load();
 		repaint();
 	}
