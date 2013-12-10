@@ -130,7 +130,7 @@ public class Field extends JPanel {
 			
 			if(win_count == planets.size()) {
 				status.setText("You have conquered the planet field!");
-				if(level_count == 2) { System.exit(0); }
+				if(level_count == 4) { System.exit(0); }
 				else { level_count++; }
 				reset();
 			}
