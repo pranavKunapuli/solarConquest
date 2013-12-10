@@ -20,8 +20,15 @@ public class Instructions extends JPanel {
 		rules = "";
 		try {
 			buff = new BufferedReader(new FileReader(filename));
+			while(buff.ready()) {
+				rules += buff.readLine() + "\n";
+			}
+			buff.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File Not Found");
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

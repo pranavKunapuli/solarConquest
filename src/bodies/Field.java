@@ -23,9 +23,8 @@ public class Field extends JPanel {
 	private Planet finish = null;
 	private Integer time_counter = 0;
 	private int level_count = 1;
-	private String level = "Level" + level_count + ".txt";
 	
-	public boolean playing = false; // Whether the game is playing or not
+	public boolean playing = true; // Whether the game is playing or not
 	private JLabel status; // Current status text
 	
 	// Game constants
@@ -132,10 +131,7 @@ public class Field extends JPanel {
 			
 			if(win_count == planets.size()) {
 				status.setText("You have conquered the planet field!");
-				//level_count++;
-				//load();
-				repaint();
-				playing = false;
+				reset();
 			}
 			repaint();
 		}
@@ -147,11 +143,13 @@ public class Field extends JPanel {
 		start = null;
 		finish = null;
 		time_counter = 0;
+		level_count++;
 		load();
 		repaint();
 	}
 	
 	private void load() {
+		String level = "Level" + level_count + ".txt";
 		BufferedReader r = null;
 		//TODO Make it so that multiple levels can be read
 		try {
