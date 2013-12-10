@@ -1,0 +1,5 @@
+Mission 2: To Go Where No Man Has Gone Before
+150,200,200,50,1,50,user
+100,300,600,0,1,20,enemy
+125,1000,300,0,3,30,enemy
+200,1300,600,60,1,50,user
