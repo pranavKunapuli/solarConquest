@@ -55,7 +55,7 @@ public class Planet {
 	public int getHealth() { return this.health; }
 	public int getX() { return this.x; }
 	public int getForces() { return this.forces; }
-	public void setForces(int f) { forces = f; }
+	public void setForces(int f) { forces += f; }
 	public int getY() { return this.y; }
 	public int getSize() { return this.size	; }
 	public boolean isSelected() { return selected; }

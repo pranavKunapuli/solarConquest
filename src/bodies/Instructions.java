@@ -2,45 +2,41 @@ package bodies;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class Instructions extends JPanel {
-	String filename;
-	BufferedReader buff = null;
-	String rules;
+	Image rules;
 	
 	public Instructions() {
-		filename = "Instructions.txt";
-		rules = "";
+		BufferedImage buff = null;
 		try {
-			buff = new BufferedReader(new FileReader(filename));
-			while(buff.ready()) {
-				rules += buff.readLine() + "\n";
-			}
-			buff.close();
-		} catch (FileNotFoundException e) {
+			buff = ImageIO.read(new File("Instructions.png"));
+		} catch (IOException e) {
 			System.out.println("File Not Found");
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		rules = buff;
 	}
 	
 	@Override 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.drawString(rules, 0, 0);
+		g.drawImage(rules,0,0,null);
 	}
 	
 	@Override
 	public Dimension getPreferredSize(){
-		return new Dimension(600,500);
+		return new Dimension(800,500);
 	}
 }

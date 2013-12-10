@@ -17,12 +17,11 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class Field extends JPanel {
 	private Grid grid = new Grid(FIELD_WIDTH,FIELD_HEIGHT); // A grid for frame of reference
-	private ArrayList<Planet> planets = new ArrayList<Planet>();
-	private ArrayList<Starship> ships = new ArrayList<Starship>();
-	private Planet start = null;
-	private Planet finish = null;
-	private Integer time_counter = 0;
-	private int level_count = 1;
+	private ArrayList<Planet> planets = new ArrayList<Planet>(); // ArrayList of planets
+	private Planet start = null; // First clicked planet
+	private Planet finish = null; // Second clicked planet
+	private Integer time_counter = 0; // Keep track of time 
+	private int level_count = 1; // Increments to load next levels
 	
 	public boolean playing = true; // Whether the game is playing or not
 	private JLabel status; // Current status text
@@ -96,7 +95,7 @@ public class Field extends JPanel {
 	private void endGame() {
 		if(playing) {
 			time_counter++;
-			if(time_counter >= 120) {	
+			if(time_counter >= 60) {	
 				status.setText("Time's up! Your armada has been destroyed!");
 				playing = false;
 				System.out.println("Time up");
@@ -131,6 +130,8 @@ public class Field extends JPanel {
 			
 			if(win_count == planets.size()) {
 				status.setText("You have conquered the planet field!");
+				if(level_count == 2) { System.exit(0); }
+				else { level_count++; }
 				reset();
 			}
 			repaint();
@@ -143,7 +144,6 @@ public class Field extends JPanel {
 		start = null;
 		finish = null;
 		time_counter = 0;
-		level_count++;
 		load();
 		repaint();
 	}
@@ -214,12 +214,6 @@ public class Field extends JPanel {
 				}
 			}
 			p.draw(g);
-		}
-		
-		// Draws any ships for the field
-		for (int j = 0; j < ships.size(); j++) {
-			Starship ship = ships.get(j);
-			ship.draw(g);
 		}
 	}
 
