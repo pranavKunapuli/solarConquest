@@ -42,16 +42,18 @@ public class Field extends JPanel {
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		Timer timer = new Timer(INTERVAL, new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				ellapse();
+				ellapse(); // Performs calculations for forces and health
 			}
 		});
 		
+		// Checks if user has won game
 		Timer end = new Timer(TIME_LIMIT, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				endGame();
 			}
 		});
 		
+		// Allows user to click on planets and manipulate forces to attack
 		addMouseListener (new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

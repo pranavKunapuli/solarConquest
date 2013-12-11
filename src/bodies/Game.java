@@ -9,6 +9,7 @@ public class Game implements Runnable {
 
 	@Override
 	public void run() {
+		// Main menu screen
 		final JFrame intro = new JFrame("Main Menu");
 		intro.setLocation(500,300);
 		final JPanel options = new JPanel();
@@ -27,6 +28,7 @@ public class Game implements Runnable {
         	}
         });
 		
+        // Game screen
 		final JFrame frame = new JFrame("Solar Conquest");
 		frame.setLocation(100,100);
 		
