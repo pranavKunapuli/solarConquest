@@ -1,4 +1,4 @@
-SolarConquest
+<h3>SolarConquest</h3>
 
 A game based on allocating ships from your home planet to attack and conquer other planets! In this game, it's a race
 against the clock to conquer the map before your time runs out! Grey planets are neutral, and pose no resistance to you,
